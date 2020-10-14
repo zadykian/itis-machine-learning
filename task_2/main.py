@@ -5,21 +5,26 @@ import matplotlib.pyplot as pyplot
 
 # Точка в двумерном пространстве.
 class Point:
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
+    # Расчитать расстояние между двумя точками на плоскости.
+    def calculate_distance_to(self, second_point):
+        return numpy.sqrt((self.x - second_point.x) ** 2 + (self.y - second_point.y) ** 2)
 
-# Расчитать расстояние между двумя точками на плоскости.
-def calculate_distance(first_point: Point, second_point: Point):
-    return numpy.sqrt(
-        (first_point.x - second_point.x) ** 2
-        + (first_point.y - second_point.y) ** 2)
+
+# Получить центроид массива точек
+def get_centroid(points):
+    x_sum = sum(map(lambda p: p.x, points))
+    y_sum = sum(map(lambda p: p.y, points))
+    return Point(x_sum / len(points), y_sum / len(points))
 
 
 class KMeansAlgorithm:
 
-    def __init__(self, k=3, tolerance=0.0001, max_iterations=500):
+    def __init__(self, k=3, tolerance=0.001, max_iterations=1000):
         self.k = k
         self.tolerance = tolerance
         self.max_iterations = max_iterations
@@ -40,26 +45,31 @@ class KMeansAlgorithm:
             for point in points:
 
                 distances_to_centroids = list(map(
-                    lambda x: calculate_distance(point, x),
+                    lambda x: point.calculate_distance_to(x),
                     self.centroids.values()))
 
                 classification = distances_to_centroids.index(min(distances_to_centroids))
                 self.clusters[classification].append(point)
 
-            previous = dict(self.centroids)
+            previous_centroids = dict(self.centroids)
 
-            # Вычисляем новый центроид кластера.
+            # Находим новые центроиды кластеров
             for classification in self.clusters:
-                self.centroids[classification] = numpy.average(self.clusters[classification], axis=0)
+                self.centroids[classification] = get_centroid(self.clusters[classification])
 
-            # Проверяем, не достигнута ли требуемый шаг изменения позиции центроидов
+            tolerance_is_reached = True
+
+            # Проверяем, не достигнут ли минимально допустимый шаг изменения позиции центроидов
             for centroid in self.centroids:
 
-                original_centroid = previous[centroid]
+                previous_centroid = previous_centroids[centroid]
                 current_centroid = self.centroids[centroid]
 
-                if numpy.sum((current_centroid - original_centroid) / original_centroid * 100.0) > self.tolerance:
-                    break
+                if numpy.sum((current_centroid - previous_centroid) / previous_centroid * 100.0) > self.tolerance:
+                    tolerance_is_reached = False
+
+            if tolerance_is_reached:
+                break
 
 
 def main():
