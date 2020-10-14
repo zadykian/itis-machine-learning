@@ -10,6 +10,12 @@ class Point:
         self.x = x
         self.y = y
 
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def __ne__(self, other):
+        return not (self == other);
+
     # Расчитать расстояние между двумя точками на плоскости.
     def calculate_distance_to(self, second_point):
         return numpy.sqrt((self.x - second_point.x) ** 2 + (self.y - second_point.y) ** 2)
@@ -24,9 +30,8 @@ def get_centroid(points):
 
 class KMeansAlgorithm:
 
-    def __init__(self, k=3, tolerance=0.001, max_iterations=1000):
+    def __init__(self, k=3, max_iterations=1000):
         self.k = k
-        self.tolerance = tolerance
         self.max_iterations = max_iterations
 
     def perform_clustering(self, points):
@@ -59,13 +64,12 @@ class KMeansAlgorithm:
 
             tolerance_is_reached = True
 
-            # Проверяем, не достигнут ли минимально допустимый шаг изменения позиции центроидов
+            # Проверяем, не достигнуто равновесие
             for centroid in self.centroids:
 
                 previous_centroid = previous_centroids[centroid]
                 current_centroid = self.centroids[centroid]
-
-                if numpy.sum((current_centroid - previous_centroid) / previous_centroid * 100.0) > self.tolerance:
+                if current_centroid != previous_centroid:
                     tolerance_is_reached = False
 
             if tolerance_is_reached:
