@@ -85,7 +85,7 @@ def main():
     algorithm = KMeansAlgorithm(3)
     algorithm.perform_clustering(list(points_data_set))
 
-    colors = 10 * ["r", "g", "c", "b", "k"]
+    colors = ["r", "g", "b", "c", "k"]
 
     # Отрисовываем центроиды
     for centroid in algorithm.centroids:
