@@ -24,6 +24,7 @@ def first_connection():
     connect_pnt[j_min] = 1
 
 
+# Добавить в tree вершину, имеющую минимальный путь до существующего дерева
 def link_all():
     minim = sys.maxsize
     i_min, j_min = None, None
@@ -41,9 +42,11 @@ def link_all():
     weight[i_min][j_min] = weight[j_min][i_min] = sys.maxsize
     connect_pnt[i_min] = connect_pnt[j_min] = 1
 
+
+# Удалить из tree ребро с наибольшим весом
 def delete_connection():
     maxim = 0
-    i_max, j_max = 0
+    i_max, j_max = 0, 0
 
     for i in range(n):
         for j in range(i+1, n):
@@ -52,6 +55,17 @@ def delete_connection():
                 i_max, j_max = i, j
 
     tree[i_max][j_max] = tree[j_max][i_max] = 0
+
+
+def cluster(cl):
+    change = False
+    for i in range(n):
+        for j in range(n):
+            if tree[i][j] != 0:
+                clust_pnt[i] = clust_pnt[j] = cl
+                tree[i][j] = tree[j][i] = 0
+                change = True
+    return change
 
 
 # число вершин в графе
@@ -77,3 +91,10 @@ while 0 in connect_pnt:
 
 for i in range(k-1):
     delete_connection()
+
+clust_pnt = [0 for i in range(n)]
+
+for i in range(k-1):
+    flag = True
+    while flag:
+        flag = cluster(i)
