@@ -41,10 +41,24 @@ def link_all():
     weight[i_min][j_min] = weight[j_min][i_min] = sys.maxsize
     connect_pnt[i_min] = connect_pnt[j_min] = 1
 
+def delete_connection():
+    maxim = 0
+    i_max, j_max = 0
+
+    for i in range(n):
+        for j in range(i+1, n):
+            if tree[i][j] > maxim:
+                maxim = tree[i][j]
+                i_max, j_max = i, j
+
+    tree[i_max][j_max] = tree[j_max][i_max] = 0
 
 
 # число вершин в графе
 n = 5
+
+# число кластеров
+k = 2
 
 weight = [[0 for i in range(n)] for i in range(n)]
 
@@ -61,4 +75,5 @@ first_connection()
 while 0 in connect_pnt:
     link_all()
 
-print(connect_pnt)
+for i in range(k-1):
+    delete_connection()
