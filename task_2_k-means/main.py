@@ -28,6 +28,11 @@ def get_centroid(points):
     return Point(x_sum / len(points), y_sum / len(points))
 
 
+# Получить оптимальное число кластеров
+def get_optimal_clusters_number(points):
+    return 3
+
+
 class KMeansAlgorithm:
 
     def __init__(self, k=3, max_iterations=1000):
@@ -78,12 +83,13 @@ class KMeansAlgorithm:
 
 def main():
     # Преобразуем данные из CSV-файла в коллекцию точек.
-    points_data_set = map(
+    points_data_set = list(map(
         lambda row: Point(row[0], row[1]),
-        pandas.read_csv("data_set.csv")[['abscissa', 'ordinate']].values)
+        pandas.read_csv("data_set.csv")[['abscissa', 'ordinate']].values))
 
-    algorithm = KMeansAlgorithm(3)
-    algorithm.perform_clustering(list(points_data_set))
+    optimal_clusters_number = get_optimal_clusters_number(points_data_set)
+    algorithm = KMeansAlgorithm(optimal_clusters_number)
+    algorithm.perform_clustering(points_data_set)
 
     colors = ["r", "g", "b", "c", "k"]
 
