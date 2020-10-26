@@ -32,19 +32,19 @@ def get_centroid(points):
 def get_optimal_clusters_number(points):
     current_distance_square_sum = 0
 
-    for current_clusters_number in range(2, len(points)):
+    for current_clusters_number in range(1, len(points)):
         previous_distance_square_sum = current_distance_square_sum
         current_distance_square_sum = 0
 
         algorithm = KMeansAlgorithm(current_clusters_number)
         algorithm.perform_clustering(points)
 
-        for cluster_index in range(0, len(algorithm.clusters) - 1):
+        for cluster_index in range(0, len(algorithm.clusters)):
             for point_in_cluster in algorithm.clusters[cluster_index]:
                 current_distance_square_sum \
                     += point_in_cluster.calculate_distance_to(algorithm.centroids[cluster_index]) ** 2
 
-        if current_distance_square_sum - previous_distance_square_sum < 0.5:
+        if previous_distance_square_sum - current_distance_square_sum < 5.0 and previous_distance_square_sum != 0:
             return current_clusters_number
 
     return len(points)
