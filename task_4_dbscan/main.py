@@ -21,6 +21,19 @@ class Point:
         return numpy.sqrt((self.x - second_point.x) ** 2 + (self.y - second_point.y) ** 2)
 
 
+class DbScanAlgorithm:
+
+    # max_neighbor_distance - максимальное расстояние между точками в одном кластере
+    # min_neighbors_count - минимально необходимое число соседей для корневой точки
+    def __init__(self, max_neighbor_distance, min_neighbors_count):
+        self.max_neighbor_distance = max_neighbor_distance
+        self.min_neighbors_count = min_neighbors_count
+
+    # data_set - список точек Point для кластеризации
+    def perform_clustering(self, data_set):
+        return 0
+
+
 def main():
     # Преобразуем данные из CSV-файла в коллекцию точек.
     points_data_set = list(map(
