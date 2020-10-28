@@ -17,7 +17,7 @@ class PointColor(Enum):
 
 
 # Точка в двумерном пространстве.
-class Point:
+class Point(object):
 
     def __init__(self, x, y):
         self._x = x
@@ -35,21 +35,21 @@ class Point:
     def y(self):
         return self._y
 
-    # Определить, была ли точка уже посещена.
-    @property
-    def is_visited(self):
-        return self._is_visited
-
     # Получить цвет точки.
     @property
     def color(self):
         return self._color
 
     # Установить цвет точки.
-    @property
+    @color.setter
     def color(self, color):
         self._color = color
         self._is_visited = True
+
+    # Была ли точка уже посещена.
+    @property
+    def is_visited(self):
+        return self._is_visited
 
     # Расчитать расстояние между двумя точками на плоскости.
     def calculate_distance_to(self, second_point):
@@ -62,16 +62,29 @@ class DbScanAlgorithm:
     # max_neighbor_distance - максимальное расстояние между точками в одном кластере
     # min_neighbors_count - минимально необходимое число соседей для корневой точки
     def __init__(self, max_neighbor_distance, min_neighbors_count):
-        self.max_neighbor_distance = max_neighbor_distance
-        self.min_neighbors_count = min_neighbors_count
+        self._max_neighbor_distance = max_neighbor_distance
+        self._min_neighbors_count = min_neighbors_count
 
-    # points_data_set - список точек Point для кластеризации
+    # Выполнить кластеризацию.
+    # points_data_set - список точек Point.
     def perform_clustering(self, points_data_set):
-        clusters = {}
+        for current_point in points_data_set:
+            # Получаем соседей.
+            neighbors = self.get_neighbors_of(current_point, points_data_set)
 
-        for point in points_data_set:
-            if point.is_visited():
-                continue
+            if len(neighbors) >= self._min_neighbors_count:
+                current_point.color = PointColor.Green
+            elif any(point.color == PointColor.Green for point in neighbors):
+                current_point.color = PointColor.Yellow
+            else:
+                current_point.color = PointColor.Red
+
+    # Найти соседей точки origin_point среди точек points_list
+    # на основании значения _max_neighbor_distance
+    def get_neighbors_of(self, origin_point, points_list):
+        return list(filter(
+                lambda point: origin_point.calculate_distance_to(point) <= self._max_neighbor_distance,
+                points_list))
 
 
 def main():
@@ -80,11 +93,13 @@ def main():
         lambda row: Point(row[0], row[1]),
         pandas.read_csv("data_set.csv")[['abscissa', 'ordinate']].values))
 
-    algorithm = DbScanAlgorithm(0.1, 3)
+    algorithm = DbScanAlgorithm(0.075, 3)
     algorithm.perform_clustering(points_data_set)
 
     for point in points_data_set:
         pyplot.scatter(point.x, point.y, c=point.color.name.lower())
+
+    pyplot.show()
 
 
 if __name__ == "__main__":
