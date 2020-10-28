@@ -94,7 +94,6 @@ class DbScanAlgorithm:
             # Получаем соседей.
             neighbors = self.get_neighbors_of(current_point, points_data_set)
 
-            # Временно помечаем точку красным.
             if len(neighbors) < self._min_neighbors_count:
                 current_point.color = PointColor.Red
                 continue
@@ -114,12 +113,27 @@ class DbScanAlgorithm:
                 else:
                     neighbor.color = PointColor.Yellow
 
+        for yellow_point in filter(lambda point: point.color == PointColor.Yellow, points_data_set):
+            nearest_green_point = self.get_nearest_green_point(yellow_point, points_data_set)
+            yellow_point.cluster_index = nearest_green_point.cluster_index
+
     # Найти соседей точки origin_point среди точек points_list
     # на основании значения _max_neighbor_distance
     def get_neighbors_of(self, origin_point: Point, points_list: List[Point]):
         return list(filter(
                 lambda point: origin_point.calculate_distance_to(point) <= self._max_neighbor_distance,
                 points_list))
+
+    # Найти среди points_list ближайшую к origin_point зелёную точку.
+    @staticmethod
+    def get_nearest_green_point(origin_point: Point, points_list: List[Point]) -> Point:
+        min_distance = min(map(
+            lambda point: origin_point.calculate_distance_to(point),
+            points_list))
+
+        return next(filter(
+            lambda point: origin_point.calculate_distance_to(point) == min_distance,
+            points_list))
 
 
 def main():
