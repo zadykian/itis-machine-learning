@@ -20,23 +20,40 @@ class PointColor(Enum):
 class Point:
 
     def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.color = PointColor.Unknown
-        self.is_visited = False
+        self._x = x
+        self._y = y
+        self._color = PointColor.Unknown
+        self._is_visited = False
+
+    # Абсцисса точки.
+    @property
+    def x(self):
+        return self._x
+
+    @property
+    # Ордината точки.
+    def y(self):
+        return self._y
+
+    # Определить, была ли точка уже посещена.
+    @property
+    def is_visited(self):
+        return self._is_visited
+
+    # Получить цвет точки.
+    @property
+    def color(self):
+        return self._color
+
+    # Установить цвет точки.
+    @property
+    def color(self, color):
+        self._color = color
+        self._is_visited = True
 
     # Расчитать расстояние между двумя точками на плоскости.
     def calculate_distance_to(self, second_point):
         return numpy.sqrt((self.x - second_point.x) ** 2 + (self.y - second_point.y) ** 2)
-
-    # Определить, была ли точка уже посещена.
-    def is_visited(self):
-        return self.is_visited
-
-    # Установить цвет точки.
-    def set_color(self, color):
-        self.color = color
-        self.is_visited = True
 
 
 # алгоритм кластеризации dbscan - density-based spatial clustering of applications with noise
@@ -57,7 +74,6 @@ class DbScanAlgorithm:
                 continue
 
 
-
 def main():
     # Преобразуем данные из CSV-файла в коллекцию точек.
     points_data_set = list(map(
@@ -65,7 +81,10 @@ def main():
         pandas.read_csv("data_set.csv")[['abscissa', 'ordinate']].values))
 
     algorithm = DbScanAlgorithm(0.1, 3)
-    clusters = algorithm.perform_clustering(points_data_set)
+    algorithm.perform_clustering(points_data_set)
+
+    for point in points_data_set:
+        pyplot.scatter(point.x, point.y, c=point.color.name.lower())
 
 
 if __name__ == "__main__":
