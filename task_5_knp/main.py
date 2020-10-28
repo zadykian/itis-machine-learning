@@ -100,6 +100,8 @@ class KnpAlgorithm:
 
 def main():
     algorithm = KnpAlgorithm(5, 2)
+    algorithm.perform_clustering()
+    print(algorithm.clust_pnt)
 
 
 if __name__ == "__main__":
