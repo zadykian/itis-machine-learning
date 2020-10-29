@@ -1,11 +1,11 @@
 from graph_edge import GraphEdge
-from point import Point
+from graph_node import GraphNode
 
 
 
 def main():
-	first_node = Point(1, 1)
-	second_node = Point(2, 2)
+	first_node = GraphNode(1, 1)
+	second_node = GraphNode(2, 2)
 	edge = GraphEdge(first_node, second_node)
 	print(edge)
 
