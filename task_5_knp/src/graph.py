@@ -2,7 +2,6 @@ from typing import List
 
 from graph_edge import GraphEdge
 from graph_node import GraphNode
-from collections.abc import Iterable
 
 
 # Неориентированный граф.
@@ -24,4 +23,4 @@ class Graph:
 	def contains_node(self, graph_node: GraphNode) -> bool:
 		return any(map(
 			lambda edge: edge.first_node == graph_node or edge.second_node == graph_node,
-			self._edges))
+			self.edges))

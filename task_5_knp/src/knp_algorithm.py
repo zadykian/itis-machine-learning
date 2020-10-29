@@ -20,8 +20,8 @@ class KnpAlgorithm:
 
 		# Пока граф не содержит все узлы из points,
 		# ищем минимальное ребро, связывающее новый узел с графом.
-		while all(map(
-				lambda point: graph.contains_node(point),
+		while any(map(
+				lambda point: not graph.contains_node(point),
 				points)):
 
 			min_edge_to_add = self.get_edge_with_min_weight(
@@ -29,7 +29,7 @@ class KnpAlgorithm:
 				# Ищем ребро, один узел которого находится в графе, а второй - ещё нет.
 				lambda edge:
 					graph.contains_node(edge.first_node) and not graph.contains_node(edge.second_node)
-					or not graph.contains_node(edge.first_node and graph.contains_node(edge.second_node)))
+					or not graph.contains_node(edge.first_node) and graph.contains_node(edge.second_node))
 
 			graph.add_edge(min_edge_to_add)
 
@@ -44,12 +44,12 @@ class KnpAlgorithm:
 			# Предикат для поиска ребра.
 			edge_predicate) -> GraphEdge:
 
-		min_edge = GraphEdge(points[0], points[1])
+		min_edge = None
 
 		for outer_point in points:
 			for inner_point in filter(lambda point: point != outer_point, points):
 				current_edge = GraphEdge(outer_point, inner_point)
-				if edge_predicate(current_edge) and current_edge.weight < min_edge.weight:
+				if min_edge is None or edge_predicate(current_edge) and current_edge.weight < min_edge.weight:
 					min_edge = current_edge
 
 		return min_edge
