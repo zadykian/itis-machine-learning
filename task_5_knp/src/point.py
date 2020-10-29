@@ -34,5 +34,5 @@ class Point:
 		return sqrt((self.x - other_point.x) ** 2 + (self.y - other_point.y) ** 2)
 
 	#  Строковое представление точки (для отладки).
-	def __str__(self):
+	def __str__(self) -> str:
 		return f'({self.x}, {self.y})'
