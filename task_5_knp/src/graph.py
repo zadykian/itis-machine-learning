@@ -1,4 +1,4 @@
-from typing import List
+from typing import Iterable
 
 from graph_edge import GraphEdge
 from graph_node import GraphNode
@@ -12,13 +12,13 @@ class Graph:
 
 	# Список рёбер, входящих в состав графа.
 	@property
-	def edges(self) -> List[GraphEdge]:
+	def edges(self) -> Iterable[GraphEdge]:
 		return self._edges
 
 	# Определить, пуст ли граф.
 	@property
 	def is_empty(self) -> bool:
-		return len(self.edges) == 0
+		return len(self._edges) == 0
 
 	# Добавить в граф ребро graph_edge.
 	def add_edge(self, graph_edge: GraphEdge):
