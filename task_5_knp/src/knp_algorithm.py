@@ -65,7 +65,7 @@ class KnpAlgorithm:
 
 		min_edge = None
 
-		# Убираем дубликаты вида [a-b] [b-a], так как граф неориентированный.
+		# При помощи set() убираем дубликаты вида [a-b] [b-a], так как граф неориентированный.
 		for current_edge in set(all_edge_combinations):
 			if min_edge is None or edge_predicate(current_edge) and current_edge.weight < min_edge.weight:
 				min_edge = current_edge

@@ -11,19 +11,25 @@ def main():
 		lambda row: GraphNode(row[0], row[1]),
 		read_csv("data_set.csv")[['abscissa', 'ordinate']].values))
 
-	algorithm = KnpAlgorithm(6)
+	algorithm = KnpAlgorithm(3)
 	graph = algorithm.perform_clustering(points_data_set)
+
+	for graph_node in points_data_set:
+		draw_graph_node(graph_node)
 
 	for graph_edge in graph.edges:
 		draw_graph_edge(graph_edge)
 
 	show()
 
+
+# Отрисовать узел графа.
+def draw_graph_node(graph_node: GraphNode):
+	scatter(graph_node.x, graph_node.y, c='green', marker='^')
+
+
 # Отрисовать ребро графа.
 def draw_graph_edge(graph_edge: GraphEdge):
-	scatter(graph_edge.first_node.x, graph_edge.first_node.y, c='green', marker='^')
-	scatter(graph_edge.second_node.x, graph_edge.second_node.y, c='green', marker='^')
-
 	x_values = [graph_edge.first_node.x, graph_edge.second_node.x]
 	y_values = [graph_edge.first_node.y, graph_edge.second_node.y]
 	plot(x_values, y_values, c='green')
