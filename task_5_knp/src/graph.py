@@ -7,8 +7,8 @@ from graph_node import GraphNode
 # Неориентированный граф.
 class Graph:
 
-	def __init__(self):
-		self._edges = []
+	def __init__(self, graph_edges = None):
+		self._edges = [] if graph_edges is None else graph_edges
 
 	# Список рёбер, входящих в состав графа.
 	@property

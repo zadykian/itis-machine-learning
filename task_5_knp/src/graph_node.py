@@ -25,9 +25,9 @@ class GraphNode:
 	def __eq__(self, other_node) -> bool:
 		return self.x == other_node.x and self.y == other_node.y
 
-	# Сравнить узел с узлом other_point.
-	def __ne__(self, other_node) -> bool:
-		return not (self == other_node)
+	# Получить хеш-код узла на основании его координат.
+	def __hash__(self):
+		return hash((self.x, self.y))
 
 	# Расчитать расстояние на плоскости между двумя узлами.
 	def calculate_distance_to(self, other_node) -> float:

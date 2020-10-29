@@ -23,6 +23,16 @@ class GraphEdge:
 	def weight(self) -> float:
 		return self.first_node.calculate_distance_to(self.second_node)
 
+	# Определить, равны ли два ребра.
+	def __eq__(self, other_edge) -> bool:
+		return \
+			self.first_node == other_edge.first_node and self.second_node == other_edge.second_node \
+			or self.second_node == other_edge.first_node and self.first_node == other_edge.second_node
+
+	# Получить хеш-код ребра.
+	def __hash__(self) -> int:
+		return hash(self.first_node) ^ hash(self.second_node)
+
 	# Строковое представление ребра (для отладки).
 	def __str__(self) -> str:
-		return f'{self.first_node} - {self.second_node}'
+		return f'{self.first_node} - {self.second_node} : {self.weight}'
