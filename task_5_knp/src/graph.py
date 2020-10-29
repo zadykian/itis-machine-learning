@@ -15,6 +15,11 @@ class Graph:
 	def edges(self) -> List[GraphEdge]:
 		return self._edges
 
+	# Определить, пуст ли граф.
+	@property
+	def is_empty(self) -> bool:
+		return len(self.edges) == 0
+
 	# Добавить в граф ребро graph_edge.
 	def add_edge(self, graph_edge: GraphEdge):
 		self._edges.append(graph_edge)

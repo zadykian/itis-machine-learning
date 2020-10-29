@@ -28,7 +28,8 @@ class KnpAlgorithm:
 				points,
 				# Ищем ребро, один узел которого находится в графе, а второй - ещё нет.
 				lambda edge:
-					graph.contains_node(edge.first_node) and not graph.contains_node(edge.second_node)
+					graph.is_empty
+					or graph.contains_node(edge.first_node) and not graph.contains_node(edge.second_node)
 					or not graph.contains_node(edge.first_node) and graph.contains_node(edge.second_node))
 
 			graph.add_edge(min_edge_to_add)
