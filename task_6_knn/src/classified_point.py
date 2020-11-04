@@ -15,3 +15,7 @@ class ClassifiedPoint(Point):
     @property
     def cluster_index(self) -> int:
         return self._cluster_index
+
+    #  Строковое представление точки (для отладки).
+    def __str__(self) -> str:
+        return f'{Point.__str__(self)} : {self.cluster_index}'
