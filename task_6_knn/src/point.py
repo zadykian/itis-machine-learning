@@ -7,7 +7,7 @@ class Point:
     # Конструктор точки.
     # x - абсцисса
     # y - ордината
-    def __init__(self, x: float, y: float):
+    def __init__(self, x: float, y: float, cluster_index: int = None):
         self._x = x
         self._y = y
 
