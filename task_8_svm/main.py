@@ -1,32 +1,32 @@
 import pygame
 import sklearn.svm as svm
 import numpy as np
-from enum import Enum
 
 from interactive_window import InteractiveWindow
 from button import Button
-
-class PointType(Enum):
-    First = 1
-    Second = 2
+from point_type import PointType
 
 coordinates = []
 classification = []
 
-def perform_game_action(window: pygame.surface.Surface, event: pygame.event.Event):
 
-    def draw_circle(coordinates_array, classification_array, current_event, current_class):
-        color = (255, 0, 0) if current_class == 1 else (0, 255, 0)
+def perform_game_action(
+        window: pygame.surface.Surface,
+        event: pygame.event.Event):
+
+    def print_point(current_event, point_type: PointType):
+        color = (255, 0, 0) if point_type == PointType.First else (0, 255, 0)
         pygame.draw.circle(window, color, current_event.pos, 5)
-        coordinates_array.append(current_event.pos)
-        classification_array.append(current_class)
 
     if event.type == pygame.MOUSEBUTTONDOWN:
+        current_point_type = PointType.First \
+            if event.button == Button.LeftClick.value \
+            else PointType.Second
 
-        if event.button == Button.LeftClick.value:
-            draw_circle(coordinates, classification, event, PointType.First.value)
-        elif event.button == Button.RightClick.value:
-            draw_circle(coordinates, classification, event, PointType.Second.value)
+        print_point(event, current_point_type)
+
+        coordinates.append(event.pos)
+        classification.append(current_point_type.value)
 
     elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
 
