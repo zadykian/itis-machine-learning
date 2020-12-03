@@ -6,14 +6,15 @@ from interactive_window import InteractiveWindow
 from button import Button
 from point_type import PointType
 
-coordinates = []
-classification = []
+point_coordinates = []
+point_types = []
 
-
-def perform_game_action(
+# Выполнить одну итерацию.
+def perform_loop_action(
         window: pygame.surface.Surface,
         event: pygame.event.Event):
 
+    # Отрисовать точку в окне.
     def print_point(current_event, point_type: PointType):
         color = (255, 0, 0) if point_type == PointType.First else (0, 255, 0)
         pygame.draw.circle(window, color, current_event.pos, 5)
@@ -25,13 +26,13 @@ def perform_game_action(
 
         print_point(event, current_point_type)
 
-        coordinates.append(event.pos)
-        classification.append(current_point_type.value)
+        point_coordinates.append(event.pos)
+        point_types.append(current_point_type.value)
 
     elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
 
         clf = svm.SVC(kernel='linear', C=1.0)
-        clf.fit(coordinates, classification)
+        clf.fit(point_coordinates, point_types)
 
         a = clf.coef_[0][0]
         b = clf.coef_[0][1]
@@ -45,7 +46,7 @@ def perform_game_action(
 
 def main():
     interactive_window = InteractiveWindow(1280, 720)
-    interactive_window.run(perform_game_action)
+    interactive_window.run(perform_loop_action)
 
 
 if __name__ == "__main__":
