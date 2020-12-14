@@ -15,5 +15,5 @@ class PointGenerator:
         return \
             [
                 Point(random_value(), random_value(), random_value())
-                for _ in range(1, points_count)
+                for _ in range(0, points_count)
             ]
