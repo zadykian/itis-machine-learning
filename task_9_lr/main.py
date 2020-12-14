@@ -1,6 +1,8 @@
+from point_generator import PointGenerator
+
 
 def main():
-    raise Exception('not implemented!')
+    random_points = PointGenerator.generate_random_points()
 
 
 if __name__ == "__main__":

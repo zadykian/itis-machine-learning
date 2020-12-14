@@ -2,9 +2,9 @@
 class Point:
 
     # Конструктор точки.
-    # x - абсцисса
-    # y - ордината
-    # z - аппликата
+    # x - абсцисса;
+    # y - ордината;
+    # z - аппликата.
     def __init__(self, x: float, y: float, z: float):
         self._x = x
         self._y = y
