@@ -25,13 +25,6 @@ class Point:
     def z(self) -> float:
         return self._z
 
-    # Сравнить точку с точкой other_point.
-    def __eq__(self, other_point) -> bool:
-        return \
-            self.x == other_point.x \
-            and self.y == other_point.y \
-            and self.z == other_point.z
-
     #  Строковое представление точки (для отладки).
     def __str__(self) -> str:
         return f'({self.x}, {self.y}, {self.z})'
