@@ -6,11 +6,11 @@ from point import Point
 class PointGenerator:
 
     # Сгенерировать points_count случайных точек в трехмерном пространстве.
-    # Диапазон по всем осям - [0..1].
+    # Диапазон по всем осям - [0.0..1.0].
     @staticmethod
     def generate_random_points(points_count: int) -> Iterable[Point]:
         seed()
-        def random_value(): return round(random(), 3)
+        def random_value(): return round(100 * random(), 3)
 
         return \
             [
