@@ -6,6 +6,7 @@ from pathlib import Path
 import tensorflow
 from keras.models import load_model
 from PIL import Image
+from typing import Iterable
 
 # Распознаватель цифр.
 class DigitRecognizer:
@@ -20,9 +21,7 @@ class DigitRecognizer:
     def _create_and_save_model(model_file_name: str):
         digits_dataset = tensorflow.keras.datasets.mnist
         (x_train, y_train), (_, _) = digits_dataset.load_data()
-
         x_train = tensorflow.keras.utils.normalize(x_train, axis=1)
-        # tensorflow.keras.utils.normalize(x_test, axis=1)
 
         model = Sequential()
         model.add(Flatten())
@@ -41,15 +40,17 @@ class DigitRecognizer:
         return model
 
     # Распознать цифру.
-    def recognize_digit(self, digit):
-        path = 'digit.png'
-        pygame.image.save(digit, path)
-        img = Image.open(path)
-        img = img.resize((28, 28))
-        img = img.convert('L')
-        img = numpy.array(img)
-        img = img.reshape(1, 28, 28, 1)
-        img = img / 255.0
-        prediction = self._model.predict([img])[0]
-        res = prediction.argsort()[::-1]
-        print(res)
+    def recognize_digit(self, digit_surface) -> Iterable[int]:
+        string_image_buffer = pygame.image.tostring(digit_surface, 'RGBA')
+
+        image = Image \
+            .frombytes('RGBA', (280, 280), string_image_buffer) \
+            .resize((28, 28)) \
+            .convert('L')
+
+        image_bytes = numpy \
+            .array(image) \
+            .reshape(1, 28, 28, 1)
+
+        prediction = self._model.predict([image_bytes / 255.0])[0]
+        return prediction.argsort()[::-1]

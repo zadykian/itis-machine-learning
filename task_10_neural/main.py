@@ -1,32 +1,32 @@
 import pygame
-from enum import Enum
 
 from colors import Colors
 from digit_recognizer import DigitRecognizer
+from mouse_button import MouseButton
 
-class Button(Enum):
-    Left = 1
-    Right = 3
 
 def main():
-    screen = pygame.display.set_mode((256, 256))
+    screen = pygame.display.set_mode((280, 280))
     digit_recognizer = DigitRecognizer()
 
     while True:
-        for i in pygame.event.get():
-            if i.type == pygame.QUIT:
-                pygame.quit()
-                break
-            if i.type == pygame.MOUSEBUTTONDOWN:
-                if i.button == Button.Right.value:
-                    digit_recognizer.recognize_digit(screen)
-            elif i.type == pygame.KEYDOWN and i.key == pygame.K_SPACE:
+        for event in pygame.event.get():
+
+            if pygame.mouse.get_pressed(num_buttons = MouseButton.Left.value)[0]:
+                position = pygame.mouse.get_pos()
+                pygame.draw.circle(screen, Colors.white, (position[0], position[1]), 8)
+
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == MouseButton.Right.value:
+                recognizing_result_array = digit_recognizer.recognize_digit(screen)
+                print(recognizing_result_array)
+
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 screen.fill(Colors.black)
 
-        position = pygame.mouse.get_pos()
-        pressed = pygame.mouse.get_pressed()
-        if pressed[0]:
-            pygame.draw.circle(screen, Colors.white, (position[0], position[1]), 8)
+            elif event.type == pygame.QUIT:
+                pygame.quit()
+                break
+
         pygame.display.update()
 
 
