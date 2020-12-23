@@ -20,7 +20,7 @@ def step(gen, sum, size, eq_parameters):
         value = 0
         for j in range(len(eq_parameters)):
             value += gen[i].values[j] * eq_parameters[j]
-        absValue = abs(value - result)
+        absValue = abs(value - Parameters.result)
         if absValue == 0:
             print("Solution: " + str(gen[i].values))
             return True, sum
@@ -28,30 +28,34 @@ def step(gen, sum, size, eq_parameters):
         sum += 1.0 / absValue
     return False, sum
 
+class Parameters:
+
+    max_iterations = 50000
+    result = 30
+    generation_size = 16
+
 
 def main():
-    result = 30
-    generation_size = 15
+
     equation_parameters = [1, 2, 3, 4]
-    iterations = 50000
     inverse_coefficients_sum = 0.0
     iterator = 0
 
-    generation = create_generation(len(equation_parameters), result, generation_size)
+    generation = create_generation(len(equation_parameters), Parameters.result, Parameters.generation_size)
 
-    solved, inverse_coefficients_sum = step(generation, inverse_coefficients_sum, generation_size, equation_parameters)
+    solved, inverse_coefficients_sum = step(generation, inverse_coefficients_sum, Parameters.generation_size, equation_parameters)
 
     recalculate_accuracy(generation, inverse_coefficients_sum)
 
-    while not solved and iterator < iterations:
+    while not solved and iterator < Parameters.max_iterations:
         inverse_coefficients_sum = 0.0
         generation = \
             [
                 GenerationMemberFactory.create_new_generation_member(generation, equation_parameters)
-                for _ in range(generation_size)
+                for _ in range(Parameters.generation_size)
             ]
 
-        solved, inverse_coefficients_sum = step(generation, inverse_coefficients_sum, generation_size, equation_parameters)
+        solved, inverse_coefficients_sum = step(generation, inverse_coefficients_sum, Parameters.generation_size, equation_parameters)
         if solved:
             break
 
