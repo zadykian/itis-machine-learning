@@ -7,28 +7,30 @@ from cv2 import (
     cvtColor,
     COLOR_BGR2GRAY,
     rectangle,
-    waitKey
+    waitKey,
+    data
 )
 
 from colors import Colors
 
 def main():
-    result_scale_percent = 50
+    haar_model_path = data.haarcascades + 'haarcascade_frontalface_default.xml'
+    face_cascade = CascadeClassifier(haar_model_path)
+    input_image = imread('input.jpg')
 
-    face_cascade = CascadeClassifier('haarcascade_frontalface_default.xml')
-    img = imread('input.jpg')
+    scale_coefficient = 0.25
+    image_width = int(input_image.shape[1] * scale_coefficient)
+    image_height = int(input_image.shape[0] * scale_coefficient)
+    dimensions = (image_width, image_height)
 
-    width = int(img.shape[1] * result_scale_percent / 100)
-    height = int(img.shape[0] * result_scale_percent / 100)
-    dim = (width, height)
-    img = resize(img, dim, interpolation=INTER_AREA)
+    resized_image = resize(input_image, dimensions, interpolation=INTER_AREA)
+    gray_scaled_color = cvtColor(resized_image, COLOR_BGR2GRAY)
 
-    gray = cvtColor(img, COLOR_BGR2GRAY)
+    for (x, y, width, height) in face_cascade.detectMultiScale(gray_scaled_color, 1.1, 12):
+        red_color = (0, 0, 255)
+        rectangle(resized_image, (x, y), (x + width, y + height), red_color, 2)
 
-    for (x, y, w, h) in face_cascade.detectMultiScale(gray, 1.1, 4):
-        rectangle(img, (x, y), (x + w, y + h), Colors.blue, 2)
-
-    imshow('Detection result', img)
+    imshow('result', resized_image)
     waitKey()
 
 
