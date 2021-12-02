@@ -16,7 +16,7 @@ class Point:
     def __ne__(self, other):
         return not (self == other)
 
-    # Расчитать расстояние между двумя точками на плоскости.
+    # Рассчитать расстояние между двумя точками на плоскости.
     def calculate_distance_to(self, second_point):
         return numpy.sqrt((self.x - second_point.x) ** 2 + (self.y - second_point.y) ** 2)
 
@@ -53,20 +53,20 @@ def get_optimal_clusters_number(points):
 class KMeansAlgorithm:
 
     def __init__(self, k=3, max_iterations=1000):
+        self.clusters = {}
+        self.centroids = {}
         self.k = k
         self.max_iterations = max_iterations
 
     def perform_clustering(self, points):
 
-        self.centroids = {}
-        # Берём в качестве первоначальных цетроидов первые k точек из массива данных.
+        # Берём в качестве первоначальных центроидов первые k точек из массива данных.
         for i in range(self.k):
             self.centroids[i] = points[i]
 
         for i in range(self.max_iterations):
-            self.clusters = {}
-            for i in range(self.k):
-                self.clusters[i] = []
+            for j in range(self.k):
+                self.clusters[j] = []
 
             # Вычисляем расстояния от точки до всех центроидов, находим ближайший
             for point in points:
